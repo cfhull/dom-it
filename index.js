@@ -5,9 +5,12 @@ const elements = {}
 htmlTags.forEach(tag => {
   elements[tag] = (props, ...children)  => {
     const el = document.createElement(tag)
-    el.props = props
+    el.props = Object.keys(props)
+      .filter(x => props[x])
+      .reduce((obj, key) => Object.assign(obj, {[key]: props[key]}), {})
+
     Object.keys(props).forEach(prop => {
-        el[prop] = props[prop]
+      if (props[prop]) el[prop] = props[prop]
     })
 
     if (!Array.isArray(children))
